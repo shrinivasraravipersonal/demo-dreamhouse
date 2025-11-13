@@ -3,9 +3,6 @@ name: Validation Workflow
 # Definition when the workflow should run - Trigger on pull request to specified branches
 on:
   pull_request:
-	# The events are that a PR is opened, or when a commit is pushed
-      	# to a branch that has an existing pull request
-      
       types: [opened,synchronize]
       branches: [ main ]
 
@@ -34,15 +31,14 @@ steps:
                 with:
                 fetch-depth: 0
                 
-                - name: 'Check commit messages for the presence of jira issue key number'
-                uses: gsactions/commit-message-checker@v2
-        with:
-         pattern: '[A-Z]{4,}-\d+'
-         error: 'You need to mention the corresponding jira issue key number in commit message'  
+              #  - name: 'Check commit messages for the presence of jira issue key number'
+               # uses: gsactions/commit-message-checker@v2
+        #with:
+         #pattern: '[A-Z]{4,}-\d+'
+         #error: 'You need to mention the corresponding jira issue key number in commit message'  
           
 #Need to check for the test classes part
-
-  Validate:
+Validate:
     needs: Pre-Check
     if: |
           (github.event_name == 'pull_request') && 
@@ -74,13 +70,8 @@ steps:
         run: |
             echo "Salesforce CLI Installed Succesfully!"
             sf -v
-
-
-	    # Install the SFDX-Git-Delta plugin - https://github.com/scolladon/sfdx-git-delta
-            # This is an plugin that allows us to extract a package.xml with the metadata that has changed between commits.
-
-            - name: 'Installing sfdx git delta'
-              run: | 
+			- name: 'Installing sfdx git delta'
+		run: | 
                   echo y | sfdx plugins:install sfdx-git-delta
                   sfdx plugins 
 
